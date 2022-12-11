@@ -1,19 +1,28 @@
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, jsonify, request,redirect
 from flask_restful import Resource, Api
-  
+from werkzeug.utils import secure_filename
+
+
 # creating the flask app
 app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
+
+app = Flask(__name__)
+app.secret_key = "jtdyqokvnalw51g3s1d3654g6df45g1d3"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
+
 
 # creating an API object
 api = Api(app)
-  
-class Hello(Resource):
+
+class Home(Resource):
   
     def get(self):
-  
-        return jsonify({'message': 'hello world'})
-    
-    
+        return jsonify({'message': 'Welcome!'})
+
     def post(self):
           
         data = request.get_json()     # status code
@@ -22,7 +31,7 @@ class Hello(Resource):
   
 # set config
 class Config(Resource):
-    
+    'route: /config'
     def get(self):
         conf = {
             'conf1':1,
@@ -39,16 +48,27 @@ class Config(Resource):
   
 
 class VideoUploader(Resource):
-    
+    'route: /upload'
     def get(self):
 
         return jsonify({'error':'Not Accessible!'})
-    def post(self,video):
+    def post(self):
         # set config = conf
-        return jsonify({'status':'uploaded'})
+        #
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            return redirect(request.url)
+        else:
+            filename = secure_filename(file.filename)
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filename)
+            #print('upload_video filename: ' + filename)
+            return jsonify({'status':'uploaded {}'.format(filename)})
 
 # adding the defined resources along with their corresponding urls
-api.add_resource(Hello, '/')
+api.add_resource(Home, '/')
 api.add_resource(Config, '/conf')
 api.add_resource(VideoUploader, '/upload')
   
