@@ -63,6 +63,16 @@ class VideoUploader(Resource):
         else:
             filename = secure_filename(file.filename)
             filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            a,b = 1,10
+            i = 2
+            from random import randint
+            if os.path.exists(filename):
+                filename,ext = os.path.splitext(filename)
+                while os.path.exists(filename+'_{}'.format(i)+ext):
+                    a,b = b,b*10
+                    i = randint(a,b)
+                filename = filename+'_{}'.format(i)+ext
+                
             file.save(filename)
             #print('upload_video filename: ' + filename)
             return jsonify({'status':'uploaded {}'.format(filename)})
