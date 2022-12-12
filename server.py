@@ -20,6 +20,13 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 # creating an API object
 api = Api(app)
 
+def init():
+    if not os.path.exists('uploads'):
+        os.mkdir('uploads')
+    return
+
+init()
+
 class Home(Resource):
   
     def get(self):
