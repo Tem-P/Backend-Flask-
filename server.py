@@ -2,12 +2,12 @@ import os
 from flask import Flask, jsonify, request,redirect
 from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 
 # creating the flask app
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 
@@ -50,17 +50,21 @@ class Config(Resource):
   
 
 class VideoUploader(Resource):
-    'route: /upload'
-    def get(self):
+    'route: /upload' 
 
-        return jsonify({'error':'Not Accessible!'})
+    def options(self):
+        pass
+    
     def post(self):
         # set config = conf
-        #
+        app.logger.info('No selected file')
+        app.logger.info(request.data)
+        app.logger.info(request.headers)
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
         if file.filename == '':
+            app.logger.info('No selected file')
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
@@ -77,9 +81,10 @@ class VideoUploader(Resource):
                 
             file.save(filename)
             #print('upload_video filename: ' + filename)
-            return jsonify({'status':'uploaded {}'.format(filename)})
+            #return jsonify({'status':'uploaded {}'.format(filename)})
 
 # adding the defined resources along with their corresponding urls
+api.decorators = [cross_origin(origin='*', headers=['accept', 'Content-Type'])]
 api.add_resource(Home, '/')
 api.add_resource(Config, '/conf')
 api.add_resource(VideoUploader, '/upload')
