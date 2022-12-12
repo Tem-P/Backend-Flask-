@@ -2,10 +2,12 @@ import os
 from flask import Flask, jsonify, request,redirect
 from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 
 # creating the flask app
 app = Flask(__name__)
+CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 
