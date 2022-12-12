@@ -1,23 +1,11 @@
 # How to setup
 
-clone this repo
-
-create proj_dir and make sure terminal is in proj_dir
-create venv on python using:
-
-python3 -m venv env
-
-now activate venv with command:
-
-Linux:
-env/Scripts/activate
-Windows:
-env/Scripts/Activate.ps
-
-run this command to install all current requirements:
-
-pip -r requirements.txt
-
-
-you can now run server.py
+1. Clone this repository
+2. Create proj_dir and make sure terminal is in proj_dir
+3. Create venv on python using: `python3 -m venv env`  
+4. Now activate venv with command:
+   * Linux: `source env/bin/activate`
+   * Windows: `env\Scripts\activate.bat`
+5. Run this command to install all current requirements: `pip install -r requirements.txt`
+6. Run `python3 server.py` to start the server
 
