@@ -11,7 +11,7 @@ cors = CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 
-app = Flask(__name__)
+
 app.secret_key = "jtdyqokvnalw51g3s1d3654g6df45g1d3"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
