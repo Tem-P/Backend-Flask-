@@ -7,5 +7,5 @@
    * Linux: `source env/bin/activate`
    * Windows: `env\Scripts\activate.bat`
 5. Run this command to install all current requirements: `pip install -r requirements.txt`
-6. Run `python3 server.py` to start the server
+6. Run `python3 manage.py run` to start the server
 
