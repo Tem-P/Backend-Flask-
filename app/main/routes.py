@@ -7,6 +7,6 @@ from .api.upload import VideoUploader
 
 def create_routes(app,api):
     api.decorators = [cross_origin(origin='*', headers=['accept', 'Content-Type'])]
-    api.add_resource(Home, '/')
-    api.add_resource(Config, '/conf')
-    api.add_resource(VideoUploader, '/upload')
+    api.add_resource(Home, '/api/v1/')
+    api.add_resource(Config, '/api/v1/conf')
+    api.add_resource(VideoUploader, '/api/v1/upload')
