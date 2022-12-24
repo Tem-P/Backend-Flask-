@@ -20,6 +20,7 @@ class Job:
 
 class JobQueue:
     def __init__(self,nthread=2):
+        print("creating JobQueue")
         self.threads = []
         self.queue = deque()
         self.stop = False
@@ -28,6 +29,12 @@ class JobQueue:
         for i in range(nthread):
             t = Thread(target=self.processjob, args=[self.queue])
             self.threads.append(t)
+        self.run_threads()
+
+    def stop_threads(self):
+        self.stop = True
+        for t in self.threads:
+            t.join()
         
     
     def get_queue_lock(self):
@@ -45,7 +52,7 @@ class JobQueue:
     
     def run_threads(self):
         for t in self.threads:
-            t.run()
+            t.start()
 
     def processjob(self,queue):
         while not self.stop:
@@ -64,6 +71,7 @@ class JobQueue:
                 except Exception as e:
                     pass
                 self.comp_dic[job.id] = job
+                print("job {} completed result is correct = {}".format(job.id,job.iscorrect))
             else:
                 time.sleep(0.1)
 

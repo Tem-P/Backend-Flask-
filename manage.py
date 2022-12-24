@@ -8,7 +8,7 @@ def run():
     app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
     app.app_context().push()
     app.run()
-    jobqueue.stop = True
+    jobqueue.stop_threads()
 
 def test():
     """Runs the unit tests."""
