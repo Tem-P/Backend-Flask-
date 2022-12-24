@@ -28,6 +28,7 @@ class JobQueue:
         self.comp_dic = {}          # contains key=id ,value = data of completed jobs
         for i in range(nthread):
             t = Thread(target=self.processjob, args=[self.queue])
+            t.daemon = True
             self.threads.append(t)
         self.run_threads()
 

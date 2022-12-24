@@ -9,6 +9,10 @@ from ..jobqueue import jobqueue
 
 class Status(Resource):
     'route: /api/v1/status'
+    'make socket connection with above route'
+    'emit status id '
+    'sends completed:True/False'
+    'if completed:True also sends path to output file '
 
     def __init__(self,socketio):
         pass
