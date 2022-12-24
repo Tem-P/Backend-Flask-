@@ -6,7 +6,7 @@ from flask import current_app as app
 class Home(Resource):
   
     def get(self):
-        return jsonify({'message': 'Welcome!'})
+        return jsonify({'Message': 'This is Home!'})
 
     def post(self):
           

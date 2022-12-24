@@ -4,7 +4,7 @@ from flask import current_app as app
 
 # set config
 class Config(Resource):
-    'route: /config'
+    'route: /api/v1/config'
     def get(self):
         conf = {
             'conf1':1,

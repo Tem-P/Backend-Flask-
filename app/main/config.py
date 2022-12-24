@@ -6,6 +6,7 @@ import os
 basedir = os.path.abspath(os.path.dirname('.'))
 
 app = None
+socketio = None
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'n0t_s0_secret')

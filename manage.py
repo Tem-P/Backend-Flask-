@@ -2,11 +2,13 @@ import os
 import unittest
 import sys
 from app.main import create_app
+from app.main.jobqueue import jobqueue
 
 def run():
     app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
     app.app_context().push()
     app.run()
+    jobqueue.stop = True
 
 def test():
     """Runs the unit tests."""
