@@ -1,4 +1,5 @@
 import os
+import time
 from flask import jsonify, request,redirect
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
@@ -7,7 +8,7 @@ from flask_socketio import emit,send
 
 from .. import jobqueue
 
-class Status(Resource):
+class StatusAPI(Resource):
     'route: /api/v1/status'
     'make socket connection with above route'
     'emit status id '
@@ -30,11 +31,18 @@ class Status(Resource):
             emit('error',id_str)
             return
         jq = jobqueue.jobqueue
+        '''
         if id not in jq.comp_dic:
             emit('status',{'completed':False})
         else:
             emit('status',{'completed':True,'path':jq.comp_dic[id].pathout})
-            del(jq.comp_dic[id])
+        '''
+        while id not in jq.comp_dic:
+            time.sleep(0.1)
+        emit('completed',{'completed':True,'path':jq.comp_dic[id].pathout})
+        del(jq.comp_dic[id])
+            
+
     def send_completed(self):
         pass
 

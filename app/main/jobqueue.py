@@ -4,7 +4,7 @@ import itertools
 import time
 from app.main.ML.poseDet import  weight_lifting
 from os import path
-
+from flask_socketio import emit,socketio
 
 class Job:
     lastjobid = itertools.count(0)
@@ -55,6 +55,8 @@ class JobQueue:
                 "Call ML function with args=[path,config]"
                 ret_val = None
                 try:
+                    #time.sleep(5)
+                    #ret_val = 1
                     ret_val = weight_lifting(job.pathin,job.pathout)
                     if ret_val:
                         job.iscorrect = True
@@ -62,8 +64,10 @@ class JobQueue:
                         job.iscorrect = False
                 except Exception as e:
                     pass
+                # remove below line in future
                 self.comp_dic[job.id] = job
                 self.app.logger.info("job {} completed result is correct = {}".format(job.id,job.iscorrect))
+
             else:
                 time.sleep(0.1)
 

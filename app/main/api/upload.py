@@ -7,7 +7,7 @@ from .. import jobqueue
 
 Job = jobqueue.Job
 
-class VideoUploader(Resource):
+class VideoUploaderAPI(Resource):
     'route: /api/v1/upload' 
 
     def options(self):

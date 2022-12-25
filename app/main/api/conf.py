@@ -3,7 +3,7 @@ from flask_restful import Resource
 from flask import current_app as app
 
 # set config
-class Config(Resource):
+class ConfigAPI(Resource):
     'route: /api/v1/config'
     def get(self):
         conf = {
