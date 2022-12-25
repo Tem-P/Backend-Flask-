@@ -1,9 +1,8 @@
 from collections import deque
-from threading import Thread
+from threading import Thread,Lock
 import itertools
 import time
 from app.main.ML.poseDet import  weight_lifting
-
 from os import path
 
 
@@ -19,18 +18,19 @@ class Job:
         self.created = None # create time
 
 class JobQueue:
-    def __init__(self,nthread=2):
-        print("creating JobQueue")
+    def __init__(self,app,nthread=2):
         self.threads = []
         self.queue = deque()
         self.stop = False
-        self.locked = False
+        self.queuelock = Lock()
         self.comp_dic = {}          # contains key=id ,value = data of completed jobs
+        self.app = app
         for i in range(nthread):
             t = Thread(target=self.processjob, args=[self.queue])
             t.daemon = True
             self.threads.append(t)
         self.run_threads()
+        self.app.logger.info('{} job executor threads are starting')
 
     def stop_threads(self):
         self.stop = True
@@ -38,19 +38,10 @@ class JobQueue:
             t.join()
         
     
-    def get_queue_lock(self):
-        while self.locked:
-            pass
-        self.locked = True
-
-    def release_queue_lock(self):
-        self.locked = False
-
     def add(self,job):
-        self.get_queue_lock()
-        self.queue.append(job)
-        self.release_queue_lock()
-    
+        with self.queuelock:
+            self.queue.append(job)
+        
     def run_threads(self):
         for t in self.threads:
             t.start()
@@ -58,9 +49,9 @@ class JobQueue:
     def processjob(self,queue):
         while not self.stop:
             if self.queue:
-                self.get_queue_lock()
-                job = self.queue.popleft()
-                self.release_queue_lock()
+                with self.queuelock:
+                    job = self.queue.popleft()
+                self.app.logger.info('start processing job using thread')
                 "Call ML function with args=[path,config]"
                 ret_val = None
                 try:
@@ -72,10 +63,11 @@ class JobQueue:
                 except Exception as e:
                     pass
                 self.comp_dic[job.id] = job
-                print("job {} completed result is correct = {}".format(job.id,job.iscorrect))
+                self.app.logger.info("job {} completed result is correct = {}".format(job.id,job.iscorrect))
             else:
                 time.sleep(0.1)
 
 
 # export jobqueue so it can be used
-jobqueue = JobQueue(2)
+# manage.py create and assigns jobqueue object
+jobqueue = None

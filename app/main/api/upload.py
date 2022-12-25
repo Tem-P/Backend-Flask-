@@ -3,7 +3,9 @@ from flask import jsonify, request,redirect
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 from flask import current_app as app
-from ..jobqueue import Job,jobqueue
+from .. import jobqueue
+
+Job = jobqueue.Job
 
 class VideoUploader(Resource):
     'route: /api/v1/upload' 
@@ -13,9 +15,7 @@ class VideoUploader(Resource):
     
     def post(self):
         # set config = conf
-        app.logger.info('No selected file')
-        app.logger.info(request.data)
-        app.logger.info(request.headers)
+        #app.logger.info(request.headers)
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
@@ -38,7 +38,8 @@ class VideoUploader(Resource):
             file.save(filename)
             job = Job(filename)
             'TODO : create a Job object from jobqueue.py'
-            jobqueue.add(job)
+            if jobqueue.jobqueue:
+                jobqueue.jobqueue.add(job)
             return jsonify({'id':job.id})
             #print('upload_video filename: ' + filename)
             #return jsonify({'status':'uploaded {}'.format(filename)})

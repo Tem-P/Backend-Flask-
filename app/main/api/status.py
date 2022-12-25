@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import current_app as app
 from flask_socketio import emit,send
 
-from ..jobqueue import jobqueue
+from .. import jobqueue
 
 class Status(Resource):
     'route: /api/v1/status'
@@ -17,10 +17,10 @@ class Status(Resource):
     def __init__(self,socketio):
         pass
 
-    def connected(id_str):
+    def connected(self,id_str):
         emit('connected','You are connected to socket')
 
-    def get_status(id_str):
+    def get_status(self,id_str):
         "get status of given id in message and emit it "
         print("get_status(self,message):",id_str)
         id = 0
@@ -29,10 +29,13 @@ class Status(Resource):
         except ValueError:
             emit('error',id_str)
             return
-        if id not in jobqueue.comp_dic:
+        jq = jobqueue.jobqueue
+        if id not in jq.comp_dic:
             emit('status',{'completed':False})
         else:
-            emit('status',{'completed':True,'path':jobqueue.comp_dic[id].pathout})
-            del(jobqueue.comp_dic[id])
+            emit('status',{'completed':True,'path':jq.comp_dic[id].pathout})
+            del(jq.comp_dic[id])
+    def send_completed(self):
+        pass
 
 status = None
