@@ -19,11 +19,12 @@ class StatusAPI(Resource):
         pass
 
     def connected(self,id_str):
-        emit('connected','You are connected to socket')
+        app.logger.info("client connected throgh socket")
+        #emit('connected','You are connected to socket')
 
     def get_status(self,id_str):
         "get status of given id in message and emit it "
-        print("get_status(self,message):",id_str)
+        #print("get_status(self,message):",id_str)
         id = 0
         try:
             id = int(id_str)
@@ -40,13 +41,16 @@ class StatusAPI(Resource):
         if id in jq.jobs_in_proc:
             job = jq.jobs_in_proc[id]
             if job.asked_status:
+                app.logger.info("repeated status request from frontend")
                 return
             else:
+                app.logger.info("first status request from frontend")
                 job.asked_status = True
         while id in jq.jobs_in_proc:
             time.sleep(0.1)
         if id not in jq.comp_dic:
             return
+        emit('status',{'completed':True,'path':jq.comp_dic[id].pathout})
         emit('completed',{'completed':True,'path':jq.comp_dic[id].pathout})
         del(jq.comp_dic[id])
 
