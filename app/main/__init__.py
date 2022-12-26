@@ -14,6 +14,8 @@ from .routes import create_routes
 def create_app(config_name):
     if not os.path.exists('uploads'):
         os.mkdir('uploads')
+    if not os.path.exists('processed'):
+        os.mkdir('processed')
     app = Flask(__name__)
     config.app = app
     socketio = SocketIO(app,cors_allowed_origins='*')
