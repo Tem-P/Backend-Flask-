@@ -3,7 +3,7 @@ from .api.home import HomeAPI
 from .api.conf import ConfigAPI
 from .api.upload import VideoUploaderAPI
 from .api.status import StatusAPI
-from .api.user import UserLoginAPI,UserRegisterAPI,UsernameCheckAPI
+from .api.user import UserLoginAPI,UserRegisterAPI,UsernameCheckAPI,UserTestAPI
 
 from . import config
 
@@ -16,6 +16,7 @@ def create_routes(app,api):
     api.add_resource(UserLoginAPI,     '/api/v1/user/login')
     api.add_resource(UserRegisterAPI,  '/api/v1/user/register')
     api.add_resource(UsernameCheckAPI,  '/api/v1/user/checkusername')
+    api.add_resource(UserTestAPI,        '/api/v1/isauth') #TODO: remove this, only for testing
     # route '/api/v1/user'
     # used for login (get) and register (post)
     # api.add_resource(Status, '/api//v1/status')

@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask import current_app as app
 from ..model.user import User
+import jwt
 
 class UsernameCheckAPI(Resource):
     'route: /api/v1/user/checkusername'
@@ -39,7 +40,8 @@ class UserLoginAPI(Resource):
             return jsonify({'error':'username or password wrong'})
         
         "generate jwt token and return it"
-        return jsonify({'token':'1234567'})
+        token = jwt.encode({'username':username},app.config['SECRET_KEY'])
+        return jsonify({'jwt':token})
 
 class UserRegisterAPI(Resource):
     'route: /api/v1/user/register'
@@ -73,3 +75,20 @@ class UserRegisterAPI(Resource):
         user.save()
         token = 'token'
         return {'jwt':token}
+
+# this class will just test the jwt token
+class UserTestAPI(Resource):
+    'route: /api/v1/user/test'
+
+    def get(self):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error':'token not found'})
+        try:
+            token = token.split(' ')[1]
+            data = jwt.decode(token,app.config['SECRET_KEY'],algorithms=['HS256'])
+            return jsonify({'data':data})
+        except Exception as e:
+            print(e)
+            return jsonify({'error':'token is invalid'})
+
