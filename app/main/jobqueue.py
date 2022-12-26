@@ -12,7 +12,8 @@ class Job:
         self.id = next(Job.lastjobid)
         self.pathin = pathin
         fname,ext = path.splitext(pathin)
-        self.pathout = fname.replace('upload','processed')+"_out"+ext
+        self.pathout = fname.replace('uploads','processed')+"_out"+ext
+        print(self.pathout)
         self.iscorrect = None
         self.done = False
         self.created = None # create time
