@@ -4,6 +4,8 @@ from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_restful import Api
+from flask_pymongo import PyMongo
+from flask_bcrypt import Bcrypt
 
 # custom modules
 from . import config
@@ -16,14 +18,16 @@ def create_app(config_name):
         os.mkdir('uploads')
     if not os.path.exists('processed'):
         os.mkdir('processed')
+    
     app = Flask(__name__)
-    config.app = app
+    app.config.from_object(config.config_by_name[config_name])
+    
+    config.mongo = PyMongo(app)
     socketio = SocketIO(app,cors_allowed_origins='*')
     config.socketio = socketio
     CORS(app)
     api = Api(app)
+    config.bcrypt = Bcrypt(app)
     create_routes(app,api)
-
-    app.config.from_object(config.config_by_name[config_name])
 
     return app

@@ -2,23 +2,64 @@ import os
 from flask import jsonify, request,redirect
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
+from flask_bcrypt import generate_password_hash, check_password_hash
 from flask import current_app as app
 from ..model.user import User
 
 class UserLoginAPI(Resource):
     'route: /api/v1/user/login'
-    
-    def get(self):
-        'login'
-        return jsonify({'get':'request','sent':'here'})
 
     def post(self):
         'login'
-        return jsonify({'user':'abc','password':'xyz'})
+        "get data from form"
+        body = request.get_json()
+        attributes =  ['username','password']
+        for key in attributes:
+            if key not in body:
+                return jsonify({'error':'{} not found in request'.format(key)})
+        username = body['username']
+        password = body['password']
+        users = User.get({'username':username})
+
+        if not users:
+            return jsonify({'error':'username or password wrong'})
+        print(users[0].password,password)
+        if not check_password_hash(users[0].password, password):
+            # wrong password
+            print("wrong password")
+            return jsonify({'error':'username or password wrong'})
+        
+        "generate jwt token and return it"
+        return jsonify({'token':'1234567'})
 
 class UserRegisterAPI(Resource):
     'route: /api/v1/user/register'
     
     def post(self):
         'register'
-        return jsonify({'user':'abc','password':'xyz'})
+        "get data from form"
+        body = request.get_json()
+        attributes =  ['username','email','password','cpassword']
+        for key in attributes:
+            if key not in body:
+                return jsonify({'error':'{} not found in request'.format(key)})
+        username  = body['username']
+        email     = body['email']
+        password  = body['password']
+        cpassword = body['cpassword']
+        if password!=cpassword:
+            return jsonify({'error':'{} two passwords does not match'.format(key)})
+        
+        "check if email valid and not already exist"
+        "check if username valid and not already exist"
+        users = User.get({'username':username})
+        if len(users)>0:
+            return jsonify({'error':'username already exists'})
+        "hash password"
+        user = User()
+        user.username = username
+        user.email = email
+        user.password = generate_password_hash(password).decode('utf8')
+        user.save()
+        token = 'token'
+        return {'jwt':token}
