@@ -6,6 +6,15 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 from flask import current_app as app
 from ..model.user import User
 
+class UsernameCheckAPI(Resource):
+    'route: /api/v1/user/checkusername'
+
+    def get(self):
+        'check if username is valid'
+        username = request.args.get('username')
+        users = User.get({'username':username})
+        return jsonify({'valid':not bool(users)})
+
 class UserLoginAPI(Resource):
     'route: /api/v1/user/login'
 
