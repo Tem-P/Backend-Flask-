@@ -61,9 +61,10 @@ class UserRegisterAPI(Resource):
         
         "check if email valid and not already exist"
         "check if username valid and not already exist"
-        users = User.get({'username':username})
-        if len(users)>0:
-            return jsonify({'error':'username already exists'})
+        users = User.get({'$or':[{'username':username},{'email':email}]})
+        if users:
+            return jsonify({'error':'username or email already exist'})
+
         "hash password"
         user = User()
         user.username = username
