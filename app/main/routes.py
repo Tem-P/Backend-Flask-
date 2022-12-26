@@ -22,6 +22,7 @@ def create_routes(app,api):
     socketio = config.socketio
     status = StatusAPI(socketio)
     socketio.on_event('connect', status.connected, namespace='/api/v1/status')
+    socketio.on_event('disconnect', status.disconnected, namespace='/api/v1/status')
     socketio.on_event('get_status', status.get_status, namespace='/api/v1/status')
     #socketio.on_event('message', s.handle_message, namespace='/api/v1/status')
 

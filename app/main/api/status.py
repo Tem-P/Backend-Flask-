@@ -19,7 +19,11 @@ class StatusAPI(Resource):
         pass
 
     def connected(self,id_str):
-        app.logger.info("client connected throgh socket")
+        app.logger.info("client connected through socket")
+        #emit('connected','You are connected to socket')
+    
+    def disconnected(self,id_str):
+        app.logger.info("client disconnected!")
         #emit('connected','You are connected to socket')
 
     def get_status(self,id_str):
