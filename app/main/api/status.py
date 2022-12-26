@@ -18,11 +18,11 @@ class StatusAPI(Resource):
     def __init__(self,socketio):
         pass
 
-    def connected(self,id_str):
+    def connected(self):
         app.logger.info("client connected through socket")
         #emit('connected','You are connected to socket')
     
-    def disconnected(self,id_str):
+    def disconnected(self):
         app.logger.info("client disconnected!")
         #emit('connected','You are connected to socket')
 
