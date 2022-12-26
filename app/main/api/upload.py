@@ -40,6 +40,7 @@ class VideoUploaderAPI(Resource):
             'TODO : create a Job object from jobqueue.py'
             if jobqueue.jobqueue:
                 jobqueue.jobqueue.add(job)
+                jobqueue.jobs_in_proc[job.id]=job
             return jsonify({'id':job.id})
             #print('upload_video filename: ' + filename)
             #return jsonify({'status':'uploaded {}'.format(filename)})

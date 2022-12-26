@@ -16,6 +16,7 @@ class Job:
         self.iscorrect = None
         self.done = False
         self.created = None # create time
+        self.asked_status = False
 
 class JobQueue:
     def __init__(self,app,nthread=2):
@@ -24,6 +25,7 @@ class JobQueue:
         self.stop = False
         self.queuelock = Lock()
         self.comp_dic = {}          # contains key=id ,value = data of completed jobs
+        self.jobs_in_proc = {}
         self.app = app
         for i in range(nthread):
             t = Thread(target=self.processjob, args=[self.queue])
@@ -49,6 +51,7 @@ class JobQueue:
     def processjob(self,queue):
         while not self.stop:
             if self.queue:
+                job = None
                 with self.queuelock:
                     job = self.queue.popleft()
                 self.app.logger.info('start processing job using thread')
@@ -66,6 +69,7 @@ class JobQueue:
                     pass
                 # remove below line in future
                 self.comp_dic[job.id] = job
+                del(self.jobs_in_proc[job.id])
                 self.app.logger.info("job {} completed result is correct = {}".format(job.id,job.iscorrect))
 
             else:

@@ -37,11 +37,18 @@ class StatusAPI(Resource):
         else:
             emit('status',{'completed':True,'path':jq.comp_dic[id].pathout})
         '''
-        while id not in jq.comp_dic:
+        if id in jq.jobs_in_proc:
+            job = jq.jobs_in_proc[id]
+            if job.asked_status:
+                return
+            else:
+                job.asked_status = True
+        while id in jq.jobs_in_proc:
             time.sleep(0.1)
+        if id not in jq.comp_dic:
+            return
         emit('completed',{'completed':True,'path':jq.comp_dic[id].pathout})
         del(jq.comp_dic[id])
-            
 
     def send_completed(self):
         pass
