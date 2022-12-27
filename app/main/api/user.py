@@ -73,7 +73,7 @@ class UserRegisterAPI(Resource):
         user.email = email
         user.password = generate_password_hash(password).decode('utf8')
         user.save()
-        token = 'token'
+        token = jwt.encode({'username':username},app.config['SECRET_KEY'])
         return {'jwt':token}
 
 # this class will just test the jwt token
