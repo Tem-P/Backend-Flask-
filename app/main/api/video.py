@@ -5,10 +5,10 @@ from werkzeug.utils import secure_filename
 from flask import current_app as app
 
 
-class VideoUploaderAPI(Resource):
+class VideoServeAPI(Resource):
     'route: /api/v1/download' 
 
-    def get(self):
+    def get(self,id):
         "take id=output video id "
         "extract path from database for that id"
         "redirect to video file"
