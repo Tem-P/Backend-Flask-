@@ -3,6 +3,7 @@ from flask import jsonify, request,redirect
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 from flask import current_app as app
+from ..model.user import is_authenticated
 from .. import jobqueue
 
 Job = jobqueue.Job
@@ -13,7 +14,10 @@ class VideoUploaderAPI(Resource):
     def options(self):
         pass
     
-    def post(self):
+    @is_authenticated
+    def post(self,user):
+        # user comes from is_authenticated wrapper
+        
         # set config = conf
         #app.logger.info(request.headers)
         if 'file' not in request.files:
