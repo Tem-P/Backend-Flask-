@@ -26,7 +26,7 @@ class User(Document):
 # wrapper function decorator that will check if token exists and is valid
 def is_authenticated(func):
     @wraps(func)
-    def check_token(*args, **kwargs):
+    def check_token(_instance,*args, **kwargs):
         token = request.headers.get('Authorization')
         error = False
         users = None
@@ -35,7 +35,7 @@ def is_authenticated(func):
         try:
             # if token is valid
             token = token.split(' ')[1]
-            data = jwt.decode(token,app.config['SECRET_KEY'],app.config['JWT_ALGOS'])
+            data = jwt.decode(token,app.config['SECRET_KEY'],algorithms=[app.config['JWT_ALGO']])
             users = User.get({'username':data['username']})
             if not users:
                 error = True
@@ -43,6 +43,6 @@ def is_authenticated(func):
             app.logger.error('token error: {}'.format(e))
             error = True
         if not error:
-            return func(users[0],*args, **kwargs)
+            return func(_instance,users[0],*args, **kwargs)
         return jsonify({'error':'token is invalid'})
     return check_token

@@ -39,7 +39,7 @@ class UserLoginAPI(Resource):
             return jsonify({'error':'username or password wrong'})
         
         "generate jwt token and return it"
-        token = jwt.encode({'username':username},app.config['SECRET_KEY'],algorithm=app.config['JWT_ALGOS'])
+        token = jwt.encode({'username':username},app.config['SECRET_KEY'],algorithm=app.config['JWT_ALGO'])
         return jsonify({'jwt':token})
 
 class UserRegisterAPI(Resource):
@@ -72,7 +72,7 @@ class UserRegisterAPI(Resource):
         user.email = email
         user.password = generate_password_hash(password).decode('utf8')
         user.save()
-        token = jwt.encode({'username':username},app.config['SECRET_KEY'],algorithm=app.config['JWT_ALGOS'])
+        token = jwt.encode({'username':username},app.config['SECRET_KEY'],algorithm=app.config['JWT_ALGO'])
         return {'jwt':token}
 
         
@@ -87,7 +87,7 @@ class UserTestAPI(Resource):
             return jsonify({'error':'token not found'})
         try:
             token = token.split(' ')[1]
-            data = jwt.decode(token,app.config['SECRET_KEY'],algorithm=app.config['JWT_ALGOS'])
+            data = jwt.decode(token,app.config['SECRET_KEY'],algorithm=[app.config['JWT_ALGO']])
             return jsonify({'data':data})
         except Exception as e:
             print(e)

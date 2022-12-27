@@ -12,7 +12,7 @@ bcrypt = None
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'n0t_s0_secret')
-    JWT_ALGOS = ['HS256']
+    JWT_ALGO = 'HS256'
     DEBUG = False
     UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
     PROC_FOLDER = os.path.join(basedir, 'processed')
