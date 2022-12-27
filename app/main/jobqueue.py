@@ -1,15 +1,16 @@
 from collections import deque
 from threading import Thread,Lock
-import itertools
+#import itertools
 import time
 from app.main.ML.poseDet import  weight_lifting
 from os import path
 from flask_socketio import emit,socketio
 
 class Job:
-    lastjobid = itertools.count(0)
-    def __init__(self,pathin=''):
-        self.id = next(Job.lastjobid)
+    #lastjobid = itertools.count(0)
+    def __init__(self,username,pathin=''):
+        self.id = None
+        self.username = username
         self.pathin = pathin
         fname,ext = path.splitext(pathin)
         self.pathout = fname.replace('uploads','processed')+"_out"+ext

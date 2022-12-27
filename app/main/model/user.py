@@ -44,5 +44,5 @@ def is_authenticated(func):
             error = True
         if not error:
             return func(_instance,users[0],*args, **kwargs)
-        return jsonify({'error':'token is invalid'})
+        return {'error':'token is invalid'},401
     return check_token
