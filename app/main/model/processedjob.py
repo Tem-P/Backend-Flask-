@@ -9,7 +9,6 @@ class ProcessedJob(Document):
         docs = config.mongo.db['job'].find(query)
         jobs = []
         for doc in docs:
-            print(doc)
             j = ProcessedJob()
             j.load(doc)
             jobs.append(j)
