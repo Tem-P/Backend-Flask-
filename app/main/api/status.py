@@ -54,8 +54,9 @@ class StatusAPI(Resource):
             time.sleep(0.1)
         if id not in jq.comp_dic:
             return
-        emit('status',{'completed':True,'path':jq.comp_dic[id].pathout})
-        emit('completed',{'completed':True,'path':jq.comp_dic[id].pathout})
+        url = '/api/v1/download/{}'.format(id)
+        emit('status',{'completed':True,'path':url})
+        emit('completed',{'completed':True,'path':url})
         del(jq.comp_dic[id])
 
     def send_completed(self):
