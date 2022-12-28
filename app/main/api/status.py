@@ -29,12 +29,12 @@ class StatusAPI(Resource):
     def get_status(self,id_str):
         "get status of given id in message and emit it "
         #print("get_status(self,message):",id_str)
-        id = 0
-        try:
-            id = int(id_str)
-        except ValueError:
-            emit('error',id_str)
-            return
+        id = id_str
+        # try:
+        #     id = int(id_str)
+        # except ValueError:
+        #     emit('error',id_str)
+        #     return
         jq = jobqueue.jobqueue
         '''
         if id not in jq.comp_dic:
