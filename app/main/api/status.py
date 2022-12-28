@@ -35,7 +35,7 @@ class StatusAPI(Resource):
         # except ValueError:
         #     emit('error',id_str)
         #     return
-        # jq = jobqueue.jobqueue
+        jq = jobqueue.jobqueue
         '''
         if id not in jq.comp_dic:
             emit('status',{'completed':False})
