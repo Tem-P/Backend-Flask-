@@ -13,7 +13,7 @@ class Job:
         self.username = username
         self.pathin = pathin
         fname,ext = path.splitext(pathin)
-        self.pathout = fname.replace('uploads','processed')+"_out"+ext
+        self.pathout = fname.replace('uploads','processed')+"_out"+".mkv"
         self.iscorrect = None
         self.done = False
         self.created = None # create time

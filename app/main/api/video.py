@@ -23,4 +23,6 @@ class VideoServeAPI(Resource):
         if user.username != pjob.username:
             return {'error':'Access Denied'},401
         "redirect to video file"
-        return send_file(pjob.outfile)
+        print(pjob.outfile)
+        directory,name = os.path.split(pjob.outfile)
+        return send_file(pjob.outfile,download_name=name)
