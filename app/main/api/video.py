@@ -24,5 +24,7 @@ class VideoServeAPI(Resource):
             return {'error':'Access Denied'},401
         "redirect to video file"
         print(pjob.outfile)
-        directory,name = os.path.split(pjob.outfile)
-        return send_file(pjob.outfile,download_name=name)
+        d,name = os.path.split(pjob.outfile)
+        print(d,name)
+        return send_file(pjob.outfile,download_name=name,as_attachment=True)
+        
